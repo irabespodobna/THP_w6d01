@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+
 	def new
  	end
 
@@ -10,14 +11,14 @@ class SessionsController < ApplicationController
 	    redirect_to user
 	   else
 	     # Create an error message.
-	     flash.now[:danger] = 'invaliiiid'
+	     flash.now[:info] = 'invaliiiid'
 	     render 'new'
 	   end
 
 	 end
 
 	 def destroy
-	     log_out
+	    log_out
 	    redirect_to('/login')
 	end
 end

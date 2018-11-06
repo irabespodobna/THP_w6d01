@@ -1,5 +1,7 @@
 class UsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :require_login, except: [:create, :new]
+  before_action :check_user, only: [:show]
 
   # GET /users
   # GET /users.json
@@ -62,6 +64,13 @@ class UsersController < ApplicationController
   end
 
   private
+
+   def check_user
+   if current_user != @user
+     redirect_to('/')
+     flash[:info] =  "Sorry, This Profile belongs to someone else !"
+   end
+ end
     # Use callbacks to share common setup or constraints between actions.
     def set_user
       @user = User.find(params[:id])
@@ -71,4 +80,11 @@ class UsersController < ApplicationController
     def user_params
       params.require(:user).permit(:first_name, :last_name, :email, :password)
     end
+
+  def require_login
+    unless logged_in?
+      flash[:info] = "You must be logged in to access this section"
+      redirect_to new_user_path# halts request cycle
+    end
+  end
 end
